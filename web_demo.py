@@ -12,7 +12,7 @@ if not os.environ.get("ANTHROPIC_API_KEY"):
 from flask import Flask, render_template_string, request
 from parser import parse_chart_text
 from analyzer import analyze_medications
-from note_generator import generate_clinical_note, generate_flags_only_report
+from note_generator import generate_clinical_note, generate_flags_only_report, generate_diana_style_report
 
 app = Flask(__name__)
 
@@ -129,6 +129,7 @@ HTML_TEMPLATE = """
     <div style="margin-bottom: 15px;">
         <button class="sample-btn" onclick="loadSample('tabular')">Load Sample: Tabular Format</button>
         <button class="sample-btn" onclick="loadSample('narrative')">Load Sample: Narrative Format</button>
+        <button class="sample-btn" onclick="loadSample('pcc')">Load Sample: PCC Format</button>
     </div>
 
     <div class="container">
@@ -137,6 +138,14 @@ HTML_TEMPLATE = """
             <form method="POST" id="analyzeForm">
                 <textarea name="ehr_text" id="ehrText" placeholder="Paste EHR medication list, MAR, or progress note here...">{{ input_text or '' }}</textarea>
                 <br>
+                <div style="margin: 10px 0; padding: 10px; background: #ecf0f1; border-radius: 4px;">
+                    <strong>Output Format:</strong><br>
+                    <label style="margin-right: 15px;"><input type="radio" name="output_format" value="flags" {{ 'checked' if (output_format or 'flags') == 'flags' else '' }}> Flags Only</label>
+                    <label style="margin-right: 15px;"><input type="radio" name="output_format" value="diana" {{ 'checked' if output_format == 'diana' else '' }}> Diana-Style Notes</label>
+                    <label><input type="radio" name="output_format" value="narrative" {{ 'checked' if output_format == 'narrative' else '' }}> Full Narrative</label>
+                    <br><br>
+                    <label>Pharmacist Name: <input type="text" name="pharmacist_name" value="{{ pharmacist_name or 'Consultant Pharmacist' }}" style="padding: 4px; border: 1px solid #ddd; border-radius: 3px; width: 200px;"></label>
+                </div>
                 <button type="submit" id="submitBtn">🔍 Analyze Medications</button>
                 <span class="loading" id="loading">⏳ Analyzing... (this takes 10-20 seconds)</span>
             </form>
@@ -205,7 +214,34 @@ Current medications:
 - Lisinopril 20 mg daily for BP
 
 Labs from 01/15/2024: K 3.3 (low), Cr 0.9
-Nursing notes patient has been drowsy and had 2 near-falls.`
+Nursing notes patient has been drowsy and had 2 near-falls.`,
+
+            pcc: `PointClickCare - Pharmacy Order Summary
+Patient: Johnson, Robert
+DOB: 06/22/1938  Age: 87  Sex: Male
+Room: 312-A  Unit: Skilled Nursing
+Attending: Dr. Martinez, NPI: 1234567890
+
+Diagnoses: Seizure disorder, Pneumonia, GERD, Hypertension,
+Type 2 Diabetes, Anemia, Chronic pain
+
+Allergies: Sulfa (rash), Latex
+
+ACTIVE MEDICATION ORDERS
+========================
+Keppra Tab 500 MG (levetiracetam) Give 500 MG via G-Tube 2 Times a Day for Seizure Disorder
+Merrem IV Soln 500 MG/20ML (meropenem) Give 500 MG via IVPB Every 8 Hours for Infection - for 14 days
+Tylenol Tab 325 MG (acetaminophen) Give 650 MG via G-Tube Every 6 Hours PRN for Pain - Max 3,250 mg/24 hr
+Protonix Tab 40 MG (pantoprazole sodium) Give 40 MG via G-Tube Once a Day for GERD
+Lopressor Tab 50 MG (metoprolol tartrate) Give 50 MG via G-Tube 2 Times a Day for Hypertension Hold for SBP less than 100 or HR less than 60
+Lipitor Tab 40 MG (atorvastatin calcium) Give 40 MG via G-Tube Every Night at Bedtime for Hyperlipidemia
+Glucophage Tab 500 MG (metformin hydrochloride) Give 500 MG via G-Tube 2 Times a Day for Diabetes
+DuoNeb Soln (ipratropium-albuterol) Give 3 ML via Nebulization Every 6 Hours for COPD
+Feosol Tab 325 MG (ferrous sulfate) Give 325 MG via G-Tube Once a Day for Anemia
+Lovenox Inj 40 MG/0.4ML (enoxaparin sodium) Give 40 MG via SubQ Once a Day for DVT Prophylaxis
+Zofran ODT 4 MG (ondansetron) Give 4 MG via G-Tube Every 8 Hours PRN for Nausea
+Milk of Magnesia Susp (magnesium hydroxide) Give 30 ML via G-Tube Once a Day PRN for Constipation
+Nystatin Oral Susp 100000 Unit/ML (nystatin) Give 5 ML Swish and Spit 4 Times a Day for Thrush`
         };
 
         function loadSample(type) {
@@ -226,9 +262,13 @@ def index():
     result = None
     input_text = None
     stats = {}
+    output_format = "flags"
+    pharmacist_name = "Consultant Pharmacist"
 
     if request.method == "POST":
         input_text = request.form.get("ehr_text", "")
+        output_format = request.form.get("output_format", "flags")
+        pharmacist_name = request.form.get("pharmacist_name", "Consultant Pharmacist")
 
         if input_text.strip():
             try:
@@ -238,8 +278,13 @@ def index():
                 # Analyze
                 analysis = analyze_medications(parsed)
 
-                # Generate report
-                result = generate_flags_only_report(parsed, analysis)
+                # Generate report based on selected format
+                if output_format == "diana":
+                    result = generate_diana_style_report(parsed, analysis, pharmacist_name)
+                elif output_format == "narrative":
+                    result = generate_clinical_note(parsed, analysis)
+                else:
+                    result = generate_flags_only_report(parsed, analysis)
 
                 # Stats for display
                 stats = {
@@ -251,7 +296,14 @@ def index():
                 result = f"Error: {str(e)}"
                 stats = {"total_meds": 0, "high_flags": 0, "complexity": "N/A"}
 
-    return render_template_string(HTML_TEMPLATE, result=result, input_text=input_text, stats=stats)
+    return render_template_string(
+        HTML_TEMPLATE,
+        result=result,
+        input_text=input_text,
+        stats=stats,
+        output_format=output_format,
+        pharmacist_name=pharmacist_name,
+    )
 
 
 if __name__ == "__main__":

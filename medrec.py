@@ -8,7 +8,7 @@ from pathlib import Path
 from models import ParsedChart
 from parser import parse_chart_text
 from analyzer import analyze_medications
-from note_generator import generate_clinical_note, generate_flags_only_report
+from note_generator import generate_clinical_note, generate_flags_only_report, generate_diana_style_report
 
 
 @click.command()
@@ -47,6 +47,16 @@ from note_generator import generate_clinical_note, generate_flags_only_report
     is_flag=True,
     help="Generate flags report only, skip narrative generation"
 )
+@click.option(
+    "--diana-style", "diana_style",
+    is_flag=True,
+    help="Generate Diana-style consultant pharmacist workup report"
+)
+@click.option(
+    "--pharmacist-name", "pharmacist_name",
+    default="Consultant Pharmacist",
+    help="Pharmacist name for Diana-style report signature line"
+)
 def main(
     input_file: Path | None,
     meds_file: Path | None,
@@ -54,7 +64,9 @@ def main(
     use_stdin: bool,
     output_file: Path | None,
     verbose: bool,
-    flags_only: bool
+    flags_only: bool,
+    diana_style: bool,
+    pharmacist_name: str,
 ):
     """LTC Medication Reconciliation Tool
 
@@ -71,6 +83,8 @@ def main(
     Examples:
       python medrec.py --input patient_chart.txt
       python medrec.py --input chart.txt --flags-only
+      python medrec.py --input chart.txt --diana-style
+      python medrec.py --input chart.txt --diana-style --pharmacist-name "Diana Lu"
       python medrec.py --input chart.txt -o review.txt
       cat chart.txt | python medrec.py --stdin
     """
@@ -110,7 +124,10 @@ def main(
             _print_analysis_summary(analysis)
 
         # Generate output
-        if flags_only:
+        if diana_style:
+            click.echo("Generating Diana-style consultant pharmacist report...")
+            output = generate_diana_style_report(parsed, analysis, pharmacist_name)
+        elif flags_only:
             click.echo("Generating flags report...")
             output = generate_flags_only_report(parsed, analysis)
         else:

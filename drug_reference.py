@@ -33,6 +33,15 @@ class DrugInfo:
     # For antipsychotics
     requires_gdr: bool = False
 
+    # New flags for Diana-style rules
+    is_steroid_inhaler: bool = False
+    is_anticoagulant: bool = False
+    is_antibiotic: bool = False
+    is_psychotropic: bool = False
+    is_topical_steroid: bool = False
+    max_duration_days: Optional[int] = None
+    seizure_contraindicated: bool = False
+
 
 # =============================================================================
 # ANTIPSYCHOTICS
@@ -51,6 +60,7 @@ ANTIPSYCHOTICS: dict[str, DrugInfo] = {
         is_anticholinergic=True,
         anticholinergic_burden=1,
         is_qtc_prolonging=True,
+        is_psychotropic=True,
         required_labs=["CBC", "CMP", "HbA1c", "lipid panel"],
         black_box_warnings=[
             "Increased mortality in elderly patients with dementia-related psychosis",
@@ -69,6 +79,7 @@ ANTIPSYCHOTICS: dict[str, DrugInfo] = {
         is_fall_risk=True,
         is_cns_depressant=True,
         is_qtc_prolonging=True,
+        is_psychotropic=True,
         required_labs=["CBC", "CMP", "HbA1c", "lipid panel", "prolactin"],
         black_box_warnings=[
             "Increased mortality in elderly patients with dementia-related psychosis"
@@ -88,6 +99,7 @@ ANTIPSYCHOTICS: dict[str, DrugInfo] = {
         is_anticholinergic=True,
         anticholinergic_burden=2,
         is_qtc_prolonging=True,
+        is_psychotropic=True,
         required_labs=["CBC", "CMP", "HbA1c", "lipid panel"],
         black_box_warnings=[
             "Increased mortality in elderly patients with dementia-related psychosis"
@@ -104,6 +116,7 @@ ANTIPSYCHOTICS: dict[str, DrugInfo] = {
         beers_rationale="Increased risk of stroke in dementia",
         is_fall_risk=True,
         is_cns_depressant=True,
+        is_psychotropic=True,
         required_labs=["CBC", "CMP", "HbA1c", "lipid panel"],
         black_box_warnings=[
             "Increased mortality in elderly patients with dementia-related psychosis",
@@ -122,6 +135,7 @@ ANTIPSYCHOTICS: dict[str, DrugInfo] = {
         is_fall_risk=True,
         is_cns_depressant=True,
         is_qtc_prolonging=True,
+        is_psychotropic=True,
         required_labs=["CBC", "CMP", "ECG"],
         black_box_warnings=[
             "Increased mortality in elderly patients with dementia-related psychosis",
@@ -139,6 +153,7 @@ ANTIPSYCHOTICS: dict[str, DrugInfo] = {
         beers_rationale="Increased risk of stroke in dementia",
         is_fall_risk=True,
         is_cns_depressant=True,
+        is_psychotropic=True,
         required_labs=["CBC", "CMP", "HbA1c", "lipid panel"],
         black_box_warnings=[
             "Increased mortality in elderly patients with dementia-related psychosis",
@@ -157,6 +172,7 @@ ANTIPSYCHOTICS: dict[str, DrugInfo] = {
         is_fall_risk=True,
         is_cns_depressant=True,
         is_qtc_prolonging=True,
+        is_psychotropic=True,
         required_labs=["CBC", "CMP", "ECG"],
         black_box_warnings=[
             "Increased mortality in elderly patients with dementia-related psychosis",
@@ -177,6 +193,7 @@ ANTIPSYCHOTICS: dict[str, DrugInfo] = {
         is_anticholinergic=True,
         anticholinergic_burden=3,
         is_qtc_prolonging=True,
+        is_psychotropic=True,
         required_labs=["ANC", "CBC", "CMP", "HbA1c", "lipid panel"],
         black_box_warnings=[
             "Severe neutropenia",
@@ -204,6 +221,7 @@ BENZODIAZEPINES: dict[str, DrugInfo] = {
         beers_rationale="Older adults have increased sensitivity; risk of cognitive impairment, delirium, falls, fractures",
         is_fall_risk=True,
         is_cns_depressant=True,
+        is_psychotropic=True,
     ),
     "alprazolam": DrugInfo(
         generic_name="alprazolam",
@@ -216,6 +234,7 @@ BENZODIAZEPINES: dict[str, DrugInfo] = {
         beers_rationale="Older adults have increased sensitivity; risk of cognitive impairment, delirium, falls, fractures",
         is_fall_risk=True,
         is_cns_depressant=True,
+        is_psychotropic=True,
     ),
     "temazepam": DrugInfo(
         generic_name="temazepam",
@@ -228,6 +247,7 @@ BENZODIAZEPINES: dict[str, DrugInfo] = {
         beers_rationale="Older adults have increased sensitivity; risk of cognitive impairment, delirium, falls, fractures",
         is_fall_risk=True,
         is_cns_depressant=True,
+        is_psychotropic=True,
     ),
     "clonazepam": DrugInfo(
         generic_name="clonazepam",
@@ -240,6 +260,7 @@ BENZODIAZEPINES: dict[str, DrugInfo] = {
         beers_rationale="Older adults have increased sensitivity; risk of cognitive impairment, delirium, falls, fractures",
         is_fall_risk=True,
         is_cns_depressant=True,
+        is_psychotropic=True,
     ),
     "diazepam": DrugInfo(
         generic_name="diazepam",
@@ -252,6 +273,7 @@ BENZODIAZEPINES: dict[str, DrugInfo] = {
         beers_rationale="Long half-life; older adults more sensitive; risk of falls, cognitive impairment",
         is_fall_risk=True,
         is_cns_depressant=True,
+        is_psychotropic=True,
     ),
 }
 
@@ -268,6 +290,7 @@ ANTIDEPRESSANTS: dict[str, DrugInfo] = {
         is_serotonergic=True,
         is_fall_risk=True,
         is_qtc_prolonging=True,
+        is_psychotropic=True,
     ),
     "escitalopram": DrugInfo(
         generic_name="escitalopram",
@@ -277,6 +300,7 @@ ANTIDEPRESSANTS: dict[str, DrugInfo] = {
         is_serotonergic=True,
         is_fall_risk=True,
         is_qtc_prolonging=True,
+        is_psychotropic=True,
     ),
     "citalopram": DrugInfo(
         generic_name="citalopram",
@@ -286,6 +310,7 @@ ANTIDEPRESSANTS: dict[str, DrugInfo] = {
         is_serotonergic=True,
         is_fall_risk=True,
         is_qtc_prolonging=True,
+        is_psychotropic=True,
         is_beers_list=True,
         beers_severity="caution",
         beers_rationale="Dose-dependent QTc prolongation; avoid >20mg in elderly",
@@ -297,6 +322,7 @@ ANTIDEPRESSANTS: dict[str, DrugInfo] = {
         therapeutic_category="antidepressant",
         is_serotonergic=True,
         is_fall_risk=True,
+        is_psychotropic=True,
     ),
     "paroxetine": DrugInfo(
         generic_name="paroxetine",
@@ -307,6 +333,7 @@ ANTIDEPRESSANTS: dict[str, DrugInfo] = {
         is_fall_risk=True,
         is_anticholinergic=True,
         anticholinergic_burden=2,
+        is_psychotropic=True,
         is_beers_list=True,
         beers_severity="avoid",
         beers_rationale="Highly anticholinergic; risk of cognitive impairment",
@@ -319,6 +346,7 @@ ANTIDEPRESSANTS: dict[str, DrugInfo] = {
         therapeutic_category="antidepressant",
         is_serotonergic=True,
         is_fall_risk=True,
+        is_psychotropic=True,
     ),
     "duloxetine": DrugInfo(
         generic_name="duloxetine",
@@ -327,6 +355,7 @@ ANTIDEPRESSANTS: dict[str, DrugInfo] = {
         therapeutic_category="antidepressant",
         is_serotonergic=True,
         is_fall_risk=True,
+        is_psychotropic=True,
     ),
     # Others
     "mirtazapine": DrugInfo(
@@ -339,6 +368,7 @@ ANTIDEPRESSANTS: dict[str, DrugInfo] = {
         is_cns_depressant=True,
         is_anticholinergic=True,
         anticholinergic_burden=1,
+        is_psychotropic=True,
     ),
     "trazodone": DrugInfo(
         generic_name="trazodone",
@@ -348,12 +378,15 @@ ANTIDEPRESSANTS: dict[str, DrugInfo] = {
         is_serotonergic=True,
         is_fall_risk=True,
         is_cns_depressant=True,
+        is_psychotropic=True,
     ),
     "bupropion": DrugInfo(
         generic_name="bupropion",
         brand_names=["Wellbutrin", "Wellbutrin SR", "Wellbutrin XL", "Zyban"],
         drug_class="NDRI",
         therapeutic_category="antidepressant",
+        is_psychotropic=True,
+        seizure_contraindicated=True,
         # Not serotonergic
         black_box_warnings=["Suicidal thoughts and behaviors"],
     ),
@@ -368,6 +401,7 @@ ANTIDEPRESSANTS: dict[str, DrugInfo] = {
         is_anticholinergic=True,
         anticholinergic_burden=3,
         is_qtc_prolonging=True,
+        is_psychotropic=True,
         is_beers_list=True,
         beers_severity="avoid",
         beers_rationale="Highly anticholinergic, sedating, orthostatic hypotension",
@@ -383,6 +417,7 @@ ANTIDEPRESSANTS: dict[str, DrugInfo] = {
         is_anticholinergic=True,
         anticholinergic_burden=2,
         is_qtc_prolonging=True,
+        is_psychotropic=True,
         is_beers_list=True,
         beers_severity="avoid",
         beers_rationale="Anticholinergic, sedating, orthostatic hypotension",
@@ -508,6 +543,7 @@ CHRONIC_DISEASE_MEDS: dict[str, DrugInfo] = {
         drug_class="anticoagulant",
         therapeutic_category="anticoagulant",
         is_fall_risk=True,
+        is_anticoagulant=True,
         required_labs=["INR", "CBC"],
         black_box_warnings=["Bleeding risk"],
     ),
@@ -517,6 +553,7 @@ CHRONIC_DISEASE_MEDS: dict[str, DrugInfo] = {
         drug_class="DOAC",
         therapeutic_category="anticoagulant",
         is_fall_risk=True,
+        is_anticoagulant=True,
         required_labs=["CBC", "CrCl"],
         black_box_warnings=["Bleeding risk", "Spinal hematoma risk with neuraxial anesthesia"],
     ),
@@ -526,6 +563,7 @@ CHRONIC_DISEASE_MEDS: dict[str, DrugInfo] = {
         drug_class="DOAC",
         therapeutic_category="anticoagulant",
         is_fall_risk=True,
+        is_anticoagulant=True,
         required_labs=["CBC", "CrCl"],
         black_box_warnings=["Bleeding risk", "Spinal hematoma risk"],
     ),
@@ -894,6 +932,262 @@ OTHER_MEDS: dict[str, DrugInfo] = {
 }
 
 # =============================================================================
+# NEW DRUGS FOR DIANA-STYLE RULES
+# =============================================================================
+DIANA_RULE_MEDS: dict[str, DrugInfo] = {
+    "megestrol": DrugInfo(
+        generic_name="megestrol",
+        brand_names=["Megace", "Megace ES"],
+        drug_class="progestin",
+        therapeutic_category="appetite stimulant",
+        is_beers_list=True,
+        beers_severity="avoid",
+        beers_rationale="Minimal efficacy for weight gain in elderly; thrombotic risk, fluid retention",
+    ),
+    "sodium phosphate enema": DrugInfo(
+        generic_name="sodium phosphate enema",
+        brand_names=["Fleet Enema", "Fleet"],
+        drug_class="saline laxative",
+        therapeutic_category="GI",
+    ),
+    "solifenacin": DrugInfo(
+        generic_name="solifenacin",
+        brand_names=["Vesicare"],
+        drug_class="anticholinergic",
+        therapeutic_category="urological",
+        is_anticholinergic=True,
+        anticholinergic_burden=2,
+        is_beers_list=True,
+        beers_severity="avoid",
+        beers_rationale="Anticholinergic; cognitive impairment risk",
+    ),
+    "tamsulosin": DrugInfo(
+        generic_name="tamsulosin",
+        brand_names=["Flomax"],
+        drug_class="alpha-1 blocker",
+        therapeutic_category="urological",
+        is_fall_risk=True,
+    ),
+    "diltiazem": DrugInfo(
+        generic_name="diltiazem",
+        brand_names=["Cardizem", "Cardizem CD", "Tiazac", "Dilacor"],
+        drug_class="calcium channel blocker",
+        therapeutic_category="antihypertensive",
+        is_fall_risk=True,
+    ),
+    "aspirin": DrugInfo(
+        generic_name="aspirin",
+        brand_names=["Bayer", "Ecotrin"],
+        drug_class="antiplatelet",
+        therapeutic_category="antiplatelet",
+    ),
+    "naloxone": DrugInfo(
+        generic_name="naloxone",
+        brand_names=["Narcan"],
+        drug_class="opioid antagonist",
+        therapeutic_category="antidote",
+    ),
+    "suzetrigine": DrugInfo(
+        generic_name="suzetrigine",
+        brand_names=["Journavx"],
+        drug_class="NaV1.8 inhibitor",
+        therapeutic_category="analgesic",
+        max_duration_days=14,
+    ),
+    "metoprolol succinate": DrugInfo(
+        generic_name="metoprolol succinate",
+        brand_names=["Toprol-XL"],
+        drug_class="beta blocker",
+        therapeutic_category="antihypertensive",
+        is_fall_risk=True,
+    ),
+    "metoprolol tartrate": DrugInfo(
+        generic_name="metoprolol tartrate",
+        brand_names=["Lopressor"],
+        drug_class="beta blocker",
+        therapeutic_category="antihypertensive",
+        is_fall_risk=True,
+    ),
+    "potassium chloride": DrugInfo(
+        generic_name="potassium chloride",
+        brand_names=["K-Dur", "Klor-Con", "Micro-K"],
+        drug_class="electrolyte supplement",
+        therapeutic_category="supplement",
+        required_labs=["potassium", "BMP"],
+    ),
+    "fluticasone-salmeterol": DrugInfo(
+        generic_name="fluticasone-salmeterol",
+        brand_names=["Advair", "Advair Diskus", "Advair HFA", "AirDuo"],
+        drug_class="steroid inhaler + LABA",
+        therapeutic_category="respiratory",
+        is_steroid_inhaler=True,
+    ),
+    "budesonide-formoterol": DrugInfo(
+        generic_name="budesonide-formoterol",
+        brand_names=["Symbicort"],
+        drug_class="steroid inhaler + LABA",
+        therapeutic_category="respiratory",
+        is_steroid_inhaler=True,
+    ),
+    "fluticasone": DrugInfo(
+        generic_name="fluticasone",
+        brand_names=["Flovent", "Flovent HFA", "ArmonAir"],
+        drug_class="inhaled corticosteroid",
+        therapeutic_category="respiratory",
+        is_steroid_inhaler=True,
+    ),
+    "budesonide inhaler": DrugInfo(
+        generic_name="budesonide inhaler",
+        brand_names=["Pulmicort"],
+        drug_class="inhaled corticosteroid",
+        therapeutic_category="respiratory",
+        is_steroid_inhaler=True,
+    ),
+    "mometasone-formoterol": DrugInfo(
+        generic_name="mometasone-formoterol",
+        brand_names=["Dulera"],
+        drug_class="steroid inhaler + LABA",
+        therapeutic_category="respiratory",
+        is_steroid_inhaler=True,
+    ),
+    "sodium chloride": DrugInfo(
+        generic_name="sodium chloride",
+        brand_names=["NaCl tabs"],
+        drug_class="electrolyte supplement",
+        therapeutic_category="supplement",
+        required_labs=["sodium", "BMP"],
+    ),
+    "triamcinolone topical": DrugInfo(
+        generic_name="triamcinolone topical",
+        brand_names=["Kenalog topical"],
+        drug_class="topical corticosteroid",
+        therapeutic_category="dermatological",
+        is_topical_steroid=True,
+    ),
+    "betamethasone topical": DrugInfo(
+        generic_name="betamethasone topical",
+        brand_names=["Diprolene"],
+        drug_class="topical corticosteroid",
+        therapeutic_category="dermatological",
+        is_topical_steroid=True,
+    ),
+    "clobetasol topical": DrugInfo(
+        generic_name="clobetasol topical",
+        brand_names=["Temovate", "Clobex"],
+        drug_class="topical corticosteroid",
+        therapeutic_category="dermatological",
+        is_topical_steroid=True,
+    ),
+    # PCC-observed medications
+    "levetiracetam": DrugInfo(
+        generic_name="levetiracetam",
+        brand_names=["Keppra"],
+        drug_class="anticonvulsant",
+        therapeutic_category="anticonvulsant",
+        is_fall_risk=True,
+        is_cns_depressant=True,
+        required_labs=["drug level"],
+    ),
+    "meropenem": DrugInfo(
+        generic_name="meropenem",
+        brand_names=["Merrem"],
+        drug_class="carbapenem antibiotic",
+        therapeutic_category="antibiotic",
+        is_antibiotic=True,
+        required_labs=["CBC", "CMP"],
+    ),
+    "glycopyrrolate": DrugInfo(
+        generic_name="glycopyrrolate",
+        brand_names=["Robinul", "Cuvposa"],
+        drug_class="anticholinergic",
+        therapeutic_category="respiratory",
+        is_anticholinergic=True,
+        anticholinergic_burden=2,
+    ),
+    "ondansetron": DrugInfo(
+        generic_name="ondansetron",
+        brand_names=["Zofran"],
+        drug_class="5-HT3 antagonist",
+        therapeutic_category="antiemetic",
+        is_qtc_prolonging=True,
+    ),
+    "acetaminophen": DrugInfo(
+        generic_name="acetaminophen",
+        brand_names=["Tylenol"],
+        drug_class="analgesic",
+        therapeutic_category="analgesic",
+    ),
+    "albuterol": DrugInfo(
+        generic_name="albuterol",
+        brand_names=["ProAir", "Ventolin", "Proventil"],
+        drug_class="short-acting beta-agonist",
+        therapeutic_category="respiratory",
+    ),
+    "ipratropium-albuterol": DrugInfo(
+        generic_name="ipratropium-albuterol",
+        brand_names=["DuoNeb", "Combivent"],
+        drug_class="anticholinergic + SABA combo",
+        therapeutic_category="respiratory",
+        is_anticholinergic=True,
+        anticholinergic_burden=1,
+    ),
+    "ferrous sulfate": DrugInfo(
+        generic_name="ferrous sulfate",
+        brand_names=["Feosol", "Fer-In-Sol"],
+        drug_class="iron supplement",
+        therapeutic_category="supplement",
+    ),
+    "magnesium hydroxide": DrugInfo(
+        generic_name="magnesium hydroxide",
+        brand_names=["Milk of Magnesia", "Phillips"],
+        drug_class="antacid/laxative",
+        therapeutic_category="GI",
+    ),
+    "nystatin": DrugInfo(
+        generic_name="nystatin",
+        brand_names=["Mycostatin", "Nystop"],
+        drug_class="antifungal",
+        therapeutic_category="antifungal",
+    ),
+    "miconazole": DrugInfo(
+        generic_name="miconazole",
+        brand_names=["Monistat", "Micatin"],
+        drug_class="antifungal",
+        therapeutic_category="antifungal/topical",
+    ),
+    "enoxaparin": DrugInfo(
+        generic_name="enoxaparin",
+        brand_names=["Lovenox"],
+        drug_class="LMWH anticoagulant",
+        therapeutic_category="anticoagulant",
+        is_anticoagulant=True,
+        is_fall_risk=True,
+        required_labs=["CBC", "platelet count"],
+    ),
+    "zinc oxide": DrugInfo(
+        generic_name="zinc oxide",
+        brand_names=["Desitin", "Boudreaux's"],
+        drug_class="skin protectant",
+        therapeutic_category="dermatological",
+    ),
+    "phenytoin": DrugInfo(
+        generic_name="phenytoin",
+        brand_names=["Dilantin", "Phenytek"],
+        drug_class="anticonvulsant",
+        therapeutic_category="anticonvulsant",
+        is_fall_risk=True,
+        is_cns_depressant=True,
+        required_labs=["phenytoin level", "CBC", "CMP", "albumin"],
+    ),
+    "guaifenesin": DrugInfo(
+        generic_name="guaifenesin",
+        brand_names=["Mucinex", "Robitussin"],
+        drug_class="expectorant",
+        therapeutic_category="respiratory",
+    ),
+}
+
+# =============================================================================
 # COMBINED DRUG DATABASE
 # =============================================================================
 ALL_DRUGS: dict[str, DrugInfo] = {
@@ -903,6 +1197,7 @@ ALL_DRUGS: dict[str, DrugInfo] = {
     **OPIOIDS,
     **CHRONIC_DISEASE_MEDS,
     **OTHER_MEDS,
+    **DIANA_RULE_MEDS,
 }
 
 # Brand to generic mapping
@@ -935,7 +1230,42 @@ FREQUENCY_MAP: dict[str, str] = {
     "qweek": "once weekly",
     "biweekly": "every 2 weeks",
     "monthly": "once monthly",
+    # PCC natural-language frequencies
+    "2 times a day": "twice daily",
+    "3 times a day": "three times daily",
+    "4 times a day": "four times daily",
+    "every 8 hours": "every 8 hours",
+    "every 6 hours": "every 6 hours",
+    "every 4 hours": "every 4 hours",
+    "every 12 hours": "every 12 hours",
+    "once a day": "daily",
+    "once daily": "daily",
+    "every other day": "every other day",
+    "every night at bedtime": "at bedtime",
+    "every morning": "every morning",
+    "every evening": "every evening",
 }
+
+
+def _strip_salt_suffix(name: str) -> str:
+    """Strip common pharmaceutical salt suffixes from drug names.
+
+    Only strips the suffix if the base name (without suffix) is a known drug.
+    This prevents stripping from drug names where the 'salt' word is integral
+    (e.g., 'ferrous sulfate' stays as-is).
+    """
+    salt_suffixes = [
+        "calcium", "sodium", "hydrochloride", "hcl", "mesylate",
+        "besylate", "maleate", "fumarate", "potassium", "sulfate",
+        "acetate", "phosphate", "citrate", "tartrate", "succinate",
+        "bromide", "chloride", "nitrate", "oxalate",
+    ]
+    for suffix in salt_suffixes:
+        if name.endswith(" " + suffix):
+            base = name[: -(len(suffix) + 1)].strip()
+            if base in ALL_DRUGS or base in BRAND_TO_GENERIC:
+                return base
+    return name
 
 
 def normalize_drug_name(name: str) -> str:
@@ -952,6 +1282,14 @@ def normalize_drug_name(name: str) -> str:
     # Check brand name mapping
     if name_lower in BRAND_TO_GENERIC:
         return BRAND_TO_GENERIC[name_lower]
+
+    # Try stripping salt suffix
+    stripped = _strip_salt_suffix(name_lower)
+    if stripped != name_lower:
+        if stripped in ALL_DRUGS:
+            return stripped
+        if stripped in BRAND_TO_GENERIC:
+            return BRAND_TO_GENERIC[stripped]
 
     # Check partial matches (e.g., "Seroquel XR" -> "quetiapine")
     for brand, generic in BRAND_TO_GENERIC.items():
@@ -982,7 +1320,8 @@ def get_brand_to_generic_map() -> dict[str, str]:
 def is_bowel_medication(name: str) -> bool:
     """Check if a medication is part of a bowel regimen."""
     normalized = normalize_drug_name(name)
-    bowel_meds = {"docusate", "senna", "polyethylene glycol", "bisacodyl", "lactulose", "miralax"}
+    bowel_meds = {"docusate", "senna", "polyethylene glycol", "bisacodyl", "lactulose",
+                  "miralax", "magnesium hydroxide", "milk of magnesia"}
     return normalized in bowel_meds or any(b in normalized for b in bowel_meds)
 
 
@@ -990,3 +1329,63 @@ def is_opioid(name: str) -> bool:
     """Check if a medication is an opioid."""
     normalized = normalize_drug_name(name)
     return normalized in OPIOIDS
+
+
+def is_ppi(name: str) -> bool:
+    """Check if a medication is a proton pump inhibitor."""
+    normalized = normalize_drug_name(name)
+    ppi_drugs = {"omeprazole", "pantoprazole", "lansoprazole", "esomeprazole", "rabeprazole", "dexlansoprazole"}
+    return normalized in ppi_drugs
+
+
+def is_anticoagulant(name: str) -> bool:
+    """Check if a medication is an anticoagulant."""
+    drug_info = get_drug_info(name)
+    if drug_info and drug_info.is_anticoagulant:
+        return True
+    normalized = normalize_drug_name(name)
+    return normalized in {"warfarin", "apixaban", "rivaroxaban", "enoxaparin", "heparin", "dabigatran", "edoxaban"}
+
+
+def is_steroid_inhaler(name: str) -> bool:
+    """Check if a medication is a steroid inhaler."""
+    drug_info = get_drug_info(name)
+    if drug_info and drug_info.is_steroid_inhaler:
+        return True
+    normalized = normalize_drug_name(name)
+    steroid_inhalers = {"fluticasone-salmeterol", "budesonide-formoterol", "fluticasone",
+                        "budesonide inhaler", "mometasone-formoterol"}
+    return normalized in steroid_inhalers or any(k in normalized for k in ["advair", "symbicort", "flovent", "pulmicort", "dulera"])
+
+
+def is_psychotropic(name: str) -> bool:
+    """Check if a medication is a psychotropic."""
+    drug_info = get_drug_info(name)
+    if drug_info and drug_info.is_psychotropic:
+        return True
+    normalized = normalize_drug_name(name)
+    return normalized in ANTIPSYCHOTICS or normalized in BENZODIAZEPINES or normalized in ANTIDEPRESSANTS
+
+
+def is_antibiotic(name: str) -> bool:
+    """Check if a medication is an antibiotic."""
+    drug_info = get_drug_info(name)
+    if drug_info and drug_info.is_antibiotic:
+        return True
+    normalized = normalize_drug_name(name)
+    antibiotic_keywords = [
+        "amoxicillin", "azithromycin", "ciprofloxacin", "levofloxacin", "doxycycline",
+        "cephalexin", "metronidazole", "sulfamethoxazole", "trimethoprim", "nitrofurantoin",
+        "clindamycin", "vancomycin", "ceftriaxone", "cefazolin", "augmentin",
+        "piperacillin", "meropenem", "linezolid", "bactrim",
+    ]
+    return normalized in antibiotic_keywords or any(k in normalized for k in ["cillin", "mycin", "floxacin", "cef"])
+
+
+def is_topical_steroid(name: str) -> bool:
+    """Check if a medication is a topical steroid."""
+    drug_info = get_drug_info(name)
+    if drug_info and drug_info.is_topical_steroid:
+        return True
+    normalized = normalize_drug_name(name)
+    return "topical" in normalized and any(k in normalized for k in ["triamcinolone", "betamethasone", "clobetasol", "hydrocortisone", "fluocinonide"])

@@ -23,12 +23,22 @@ Your task is to parse copy-pasted EHR text and extract structured data. Follow t
    - Extract dose, route, frequency, indication if present
    - Mark PRN medications with is_prn: true
    - If DEA schedule is mentioned (C-II, C-III, etc.), include it
+   - Extract hold parameters if present (e.g., "hold for SBP <100")
+   - Extract administration time if specified (e.g., "0800", "AM", "bedtime")
+   - Extract formulation details (e.g., "ER", "XR", "SR", "succinate", "tartrate")
+   - Extract stop date if documented
+   - Extract last used/administered date for PRN medications if available
 
 2. **Patient Information**:
    - Extract name, age, sex if available
    - Extract diagnoses/problem list
    - Extract allergies
    - Extract admission date if available
+   - Extract date of birth (DOB) if available
+   - Extract room number if available
+   - Extract care center/unit/wing if available
+   - Extract attending physician name if available
+   - Extract psychiatrist name if available
 
 3. **Labs**:
    - Extract lab results with values, units, dates, and flags (H/L/Critical)
@@ -55,7 +65,12 @@ Return a JSON object with this exact structure:
     "sex": "string or null",
     "admission_date": "YYYY-MM-DD or null",
     "diagnoses": ["list of diagnoses"],
-    "allergies": ["list of allergies"]
+    "allergies": ["list of allergies"],
+    "dob": "YYYY-MM-DD or null",
+    "room": "string or null",
+    "care_center": "string or null",
+    "attending_physician": "string or null",
+    "psychiatrist": "string or null"
   },
   "medications": [
     {
@@ -68,7 +83,15 @@ Return a JSON object with this exact structure:
       "start_date": "YYYY-MM-DD or null",
       "prescriber": "prescriber name or null",
       "is_prn": false,
-      "schedule": "II/III/IV/V or null for DEA schedule"
+      "schedule": "II/III/IV/V or null for DEA schedule",
+      "last_used_date": "YYYY-MM-DD or null",
+      "stop_date": "YYYY-MM-DD or null",
+      "hold_parameters": "string or null (e.g., 'hold for SBP <100')",
+      "administration_time": "string or null (e.g., '0800', 'AM', 'bedtime')",
+      "formulation": "string or null (e.g., 'ER', 'XR', 'succinate', 'tartrate')",
+      "duration_days": "integer or null (e.g., 14 for a 14-day antibiotic course)",
+      "max_daily_dose": "string or null (e.g., '3,250 mg/24 hr')",
+      "administration_instructions": "string or null (e.g., 'with 8oz water', 'rinse mouth after use')"
     }
   ],
   "labs": [
@@ -86,6 +109,37 @@ Return a JSON object with this exact structure:
   "parsing_notes": ["list of notes about parsing decisions or ambiguities"]
 }
 ```
+
+## POINTCLICKCARE (PCC) FORMAT GUIDANCE
+
+If the input looks like a PCC Pharmacy Order Summary, follow these additional rules:
+
+1. **Medication line format**: `Brand Form Dose (Generic Salt) Give [amount] via [route] [frequency] for [indication]`
+   - The generic name is inside parentheses, may include salt form (e.g., "levetiracetam", "meropenem")
+   - Strip salt suffixes from generic name (e.g., "atorvastatin calcium" -> "atorvastatin")
+   - The "Give [amount]" is the actual administered dose (may differ from form dose)
+   - Route follows "via" keyword (PO, G-Tube, IVPB, SubQ, Nebulization, Topical, etc.)
+
+2. **Routes**: Normalize these PCC routes:
+   - "G-Tube" -> "G-tube" (gastrostomy tube)
+   - "IVPB" -> "IV" (IV piggyback)
+   - "Nebulization" -> "nebulizer"
+   - "Both Nostrils" -> "intranasal"
+   - "Topically" -> "topical"
+
+3. **Frequencies**: PCC uses natural language:
+   - "2 Times a Day" -> "twice daily"
+   - "3 Times a Day" -> "three times daily"
+   - "Every 8 Hours" -> "every 8 hours"
+   - "Every Night at Bedtime" -> "at bedtime"
+
+4. **PRN entries**: Look for "PRN" keyword, and extract max dose if present (e.g., "Max 3,250 mg/24 hr")
+
+5. **Hold parameters**: Extract text after "Hold for" (e.g., "Hold for SBP less than 100")
+
+6. **Duration**: If a duration is mentioned (e.g., "for 14 days"), extract as duration_days
+
+7. **Prescriber/NPI**: If NPI numbers or prescriber names appear, extract prescriber name
 
 ## IMPORTANT
 - Return ONLY valid JSON, no other text
@@ -169,13 +223,28 @@ def _convert_to_models(data: dict[str, Any]) -> ParsedChart:
     """Convert parsed JSON to Pydantic models."""
     # Parse patient
     patient_data = data.get("patient", {})
+    admission_date = _parse_date(patient_data.get("admission_date"))
+
+    # Detect new admission (within 30 days)
+    is_new_admission = False
+    if admission_date:
+        from config import NEW_ADMISSION_WINDOW_DAYS
+        days_since = (date.today() - admission_date).days
+        is_new_admission = days_since <= NEW_ADMISSION_WINDOW_DAYS
+
     patient = Patient(
         name=patient_data.get("name"),
         age=patient_data.get("age"),
         sex=patient_data.get("sex"),
-        admission_date=_parse_date(patient_data.get("admission_date")),
+        admission_date=admission_date,
         diagnoses=patient_data.get("diagnoses", []),
         allergies=patient_data.get("allergies", []),
+        dob=_parse_date(patient_data.get("dob")),
+        room=patient_data.get("room"),
+        care_center=patient_data.get("care_center"),
+        attending_physician=patient_data.get("attending_physician"),
+        psychiatrist=patient_data.get("psychiatrist"),
+        is_new_admission=is_new_admission,
     )
 
     # Parse medications
@@ -199,6 +268,14 @@ def _convert_to_models(data: dict[str, Any]) -> ParsedChart:
             drug_class=drug_info.drug_class if drug_info else None,
             is_prn=med_data.get("is_prn", False),
             schedule=med_data.get("schedule") or (drug_info.dea_schedule if drug_info else None),
+            last_used_date=_parse_date(med_data.get("last_used_date")),
+            stop_date=_parse_date(med_data.get("stop_date")),
+            hold_parameters=med_data.get("hold_parameters"),
+            administration_time=med_data.get("administration_time"),
+            formulation=med_data.get("formulation"),
+            duration_days=med_data.get("duration_days"),
+            max_daily_dose=med_data.get("max_daily_dose"),
+            administration_instructions=med_data.get("administration_instructions"),
         )
         medications.append(med)
 
