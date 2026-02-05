@@ -200,15 +200,20 @@ def _extract_json(text: str) -> dict[str, Any] | None:
     except json.JSONDecodeError:
         pass
 
-    # Try to find JSON block in markdown
-    json_match = re.search(r'```(?:json)?\s*(\{.*?\})\s*```', text, re.DOTALL)
-    if json_match:
-        try:
-            return json.loads(json_match.group(1))
-        except json.JSONDecodeError:
-            pass
+    # Try stripping markdown code fences (handles large nested JSON reliably)
+    stripped = text.strip()
+    if stripped.startswith('```'):
+        first_newline = stripped.find('\n')
+        if first_newline != -1:
+            last_fence = stripped.rfind('```', first_newline + 1)
+            if last_fence > first_newline:
+                content = stripped[first_newline + 1:last_fence].strip()
+                try:
+                    return json.loads(content)
+                except json.JSONDecodeError:
+                    pass
 
-    # Try to find raw JSON object
+    # Try to find raw JSON object (greedy - outermost braces)
     json_match = re.search(r'\{.*\}', text, re.DOTALL)
     if json_match:
         try:
