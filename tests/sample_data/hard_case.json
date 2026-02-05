@@ -1,0 +1,112 @@
+{
+  "description": "Complex test case with multiple clinical issues",
+  "patient": {
+    "name": "Test Patient",
+    "age": 84,
+    "sex": "F",
+    "diagnoses": [
+      "Dementia, unspecified",
+      "Anxiety disorder",
+      "Insomnia",
+      "Chronic pain",
+      "Atrial fibrillation",
+      "Type 2 diabetes",
+      "Hypertension",
+      "Depression"
+    ],
+    "allergies": ["Penicillin"]
+  },
+  "medications": [
+    {
+      "name": "quetiapine",
+      "dose": "100 mg",
+      "frequency": "twice daily",
+      "indication": "agitation",
+      "comment": "No documented psychiatric diagnosis; using for behavioral symptoms"
+    },
+    {
+      "name": "risperidone",
+      "dose": "0.5 mg",
+      "frequency": "at bedtime",
+      "indication": "insomnia",
+      "comment": "Second antipsychotic; inappropriate indication"
+    },
+    {
+      "name": "lorazepam",
+      "dose": "1 mg",
+      "frequency": "twice daily",
+      "comment": "Scheduled benzodiazepine in elderly"
+    },
+    {
+      "name": "oxycodone",
+      "dose": "10 mg",
+      "frequency": "every 6 hours PRN",
+      "is_prn": true,
+      "comment": "Opioid concurrent with benzodiazepine"
+    },
+    {
+      "name": "diphenhydramine",
+      "dose": "50 mg",
+      "frequency": "at bedtime",
+      "indication": "insomnia",
+      "comment": "Highly anticholinergic; Beers list"
+    },
+    {
+      "name": "cyclobenzaprine",
+      "dose": "10 mg",
+      "frequency": "three times daily",
+      "indication": "muscle spasms",
+      "comment": "Highly anticholinergic; Beers list"
+    },
+    {
+      "name": "sertraline",
+      "dose": "100 mg",
+      "frequency": "daily",
+      "indication": "depression"
+    },
+    {
+      "name": "tramadol",
+      "dose": "50 mg",
+      "frequency": "every 6 hours PRN",
+      "is_prn": true,
+      "comment": "Serotonergic; adds to opioid burden"
+    },
+    {
+      "name": "warfarin",
+      "dose": "5 mg",
+      "frequency": "daily",
+      "indication": "AFib"
+    },
+    {
+      "name": "metformin",
+      "dose": "1000 mg",
+      "frequency": "twice daily",
+      "indication": "diabetes"
+    },
+    {
+      "name": "glipizide",
+      "dose": "10 mg",
+      "frequency": "daily",
+      "indication": "diabetes",
+      "comment": "Beers list sulfonylurea"
+    },
+    {
+      "name": "omeprazole",
+      "dose": "40 mg",
+      "frequency": "twice daily",
+      "comment": "High dose PPI without clear indication"
+    }
+  ],
+  "labs": [],
+  "expected_flags": {
+    "high_severity_minimum": 5,
+    "must_include": [
+      "Multiple antipsychotics",
+      "Opioid and benzodiazepine concurrent",
+      "Serotonin syndrome risk",
+      "High anticholinergic burden",
+      "Missing bowel regimen for opioid"
+    ],
+    "expected_complexity": "HARD"
+  }
+}

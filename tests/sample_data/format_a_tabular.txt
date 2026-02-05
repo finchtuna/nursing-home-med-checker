@@ -1,0 +1,47 @@
+MEDICATION ADMINISTRATION RECORD
+================================
+Patient: Smith, Margaret
+DOB: 03/15/1942
+Age: 82
+Sex: Female
+Room: 204-B
+Admit Date: 06/01/2023
+
+DIAGNOSES:
+- Alzheimer's dementia
+- Major depressive disorder
+- Type 2 diabetes mellitus
+- Hypertension
+- Atrial fibrillation
+- Chronic kidney disease stage 3
+
+ALLERGIES: Penicillin (rash), Sulfa drugs (hives)
+
+CURRENT MEDICATIONS
+-------------------
+Drug Name           | Dose      | Route | Frequency      | Indication
+--------------------|-----------|-------|----------------|------------------
+Quetiapine          | 100 mg    | PO    | BID            | Agitation
+Sertraline          | 100 mg    | PO    | QAM            | Depression
+Lorazepam           | 0.5 mg    | PO    | QHS PRN        | Anxiety/Insomnia
+Metformin           | 500 mg    | PO    | BID            | Diabetes
+Lisinopril          | 10 mg     | PO    | Daily          | Hypertension
+Warfarin            | 5 mg      | PO    | Daily          | AFib
+Atorvastatin        | 20 mg     | PO    | QHS            | Hyperlipidemia
+Omeprazole          | 20 mg     | PO    | Daily          | GERD
+Vitamin D3          | 1000 IU   | PO    | Daily          | Supplement
+Calcium Carbonate   | 600 mg    | PO    | BID            | Supplement
+
+LABORATORY RESULTS (Last 30 days)
+---------------------------------
+Test          | Value  | Unit    | Date       | Range       | Flag
+--------------|--------|---------|------------|-------------|------
+INR           | 2.8    |         | 01/20/2024 | 2.0-3.0     |
+BMP           |        |         | 01/15/2024 |             |
+  Sodium      | 138    | mEq/L   |            | 136-145     |
+  Potassium   | 4.2    | mEq/L   |            | 3.5-5.0     |
+  Creatinine  | 1.4    | mg/dL   |            | 0.7-1.2     | H
+  BUN         | 28     | mg/dL   |            | 7-20        | H
+  Glucose     | 142    | mg/dL   |            | 70-100      | H
+HbA1c         | 7.2    | %       | 01/10/2024 | <7.0        | H
+TSH           | 2.1    | mIU/L   | 12/01/2023 | 0.4-4.0     |

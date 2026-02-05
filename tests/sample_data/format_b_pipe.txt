@@ -1,0 +1,36 @@
+RESIDENT PROFILE
+Patient Name: Johnson, Robert | MRN: 123456 | DOB: 08/22/1938 | Age: 85 | Sex: M
+Primary Physician: Dr. Williams | Admission: 03/15/2022 | Room: 112-A
+
+ACTIVE DIAGNOSES:
+Schizophrenia, chronic | Parkinson's disease | BPH | Constipation | GERD | HTN | HLD
+
+DRUG ALLERGIES: NKDA
+
+======== MEDICATION LIST ========
+
+Risperidone 2 mg | PO | BID | Schizophrenia
+Carbidopa-Levodopa 25-100 mg | PO | TID | Parkinson's
+Tamsulosin 0.4 mg | PO | QHS | BPH
+Senna-Docusate 8.6-50 mg | PO | BID | Constipation
+Pantoprazole 40 mg | PO | Daily | GERD
+Amlodipine 5 mg | PO | Daily | HTN
+Rosuvastatin 10 mg | PO | QHS | HLD
+Gabapentin 300 mg | PO | TID | Neuropathy
+Trazodone 50 mg | PO | QHS PRN | Insomnia
+Acetaminophen 650 mg | PO | Q6H PRN | Pain
+
+======== PRN MEDICATIONS ========
+
+Bisacodyl 10 mg | PO | Daily PRN | No BM x2 days
+Milk of Magnesia 30 mL | PO | Daily PRN | No BM x3 days
+Haloperidol 0.5 mg | PO/IM | Q6H PRN | Acute agitation
+
+======== RECENT LABS ========
+
+01/25/2024:
+CBC: WBC 6.2 | RBC 4.1 | Hgb 12.8 | Plt 198 | All WNL
+CMP: Na 140 | K 4.0 | Cl 102 | CO2 24 | BUN 18 | Cr 1.0 | Glu 98 | All WNL
+
+12/15/2023:
+Lipid Panel: TC 185 | LDL 102 | HDL 48 | TG 175
