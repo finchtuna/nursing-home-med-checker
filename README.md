@@ -1,4 +1,4 @@
-# Nursing Home Medication Checker
+# SNF Medication Reconciliation
 
 **A tool that helps pharmacists catch medication problems in nursing home patients.**
 
