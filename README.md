@@ -1,8 +1,8 @@
 # SNF Medication Reconciliation
 
-**A tool that helps pharmacists catch medication problems in nursing home patients.**
+**A tool that helps pharmacists catch medication problems in skilled nursing facility residents.**
 
-Pharmacists who work with nursing homes have to review dozens of patient medication lists every month. This tool makes that job faster and safer by automatically flagging potential issues like:
+Pharmacists who work with SNFs have to review dozens of patient medication lists every month. This tool makes that job faster and safer by automatically flagging potential issues like:
 
 - **Dangerous drug combinations** (like mixing opioids with sedatives)
 - **Medications that are risky for elderly patients** (Beers Criteria)
