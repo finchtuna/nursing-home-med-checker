@@ -116,7 +116,7 @@ If the input looks like a PCC Pharmacy Order Summary, follow these additional ru
 
 1. **Medication line format**: `Brand Form Dose (Generic Salt) Give [amount] via [route] [frequency] for [indication]`
    - The generic name is inside parentheses, may include salt form (e.g., "levetiracetam", "meropenem")
-   - Strip salt suffixes from generic name (e.g., "atorvastatin calcium" -> "atorvastatin")
+   - IMPORTANT: Use the FULL generic name exactly as shown in parentheses, INCLUDING salt forms (e.g., "metoprolol tartrate", "atorvastatin calcium", "ferrous sulfate", "docusate sodium"). Do NOT strip salt forms - the system normalizes them automatically.
    - The "Give [amount]" is the actual administered dose (may differ from form dose)
    - Route follows "via" keyword (PO, G-Tube, IVPB, SubQ, Nebulization, Topical, etc.)
 

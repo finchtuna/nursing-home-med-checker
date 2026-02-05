@@ -140,8 +140,8 @@ HTML_TEMPLATE = """
                 <br>
                 <div style="margin: 10px 0; padding: 10px; background: #ecf0f1; border-radius: 4px;">
                     <strong>Output Format:</strong><br>
-                    <label style="margin-right: 15px;"><input type="radio" name="output_format" value="flags" {{ 'checked' if (output_format or 'flags') == 'flags' else '' }}> Flags Only</label>
-                    <label style="margin-right: 15px;"><input type="radio" name="output_format" value="diana" {{ 'checked' if output_format == 'diana' else '' }}> Diana-Style Notes</label>
+                    <label style="margin-right: 15px;"><input type="radio" name="output_format" value="flags" {{ 'checked' if output_format == 'flags' else '' }}> Flags Only</label>
+                    <label style="margin-right: 15px;"><input type="radio" name="output_format" value="diana" {{ 'checked' if (output_format or 'diana') == 'diana' else '' }}> Diana-Style Notes</label>
                     <label><input type="radio" name="output_format" value="narrative" {{ 'checked' if output_format == 'narrative' else '' }}> Full Narrative</label>
                     <br><br>
                     <label>Pharmacist Name: <input type="text" name="pharmacist_name" value="{{ pharmacist_name or 'Consultant Pharmacist' }}" style="padding: 4px; border: 1px solid #ddd; border-radius: 3px; width: 200px;"></label>
@@ -262,7 +262,7 @@ def index():
     result = None
     input_text = None
     stats = {}
-    output_format = "flags"
+    output_format = "diana"
     pharmacist_name = "Consultant Pharmacist"
 
     if request.method == "POST":

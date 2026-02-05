@@ -1291,6 +1291,11 @@ def normalize_drug_name(name: str) -> str:
         if stripped in BRAND_TO_GENERIC:
             return BRAND_TO_GENERIC[stripped]
 
+    # Check if name is a prefix of a known drug (e.g., "metoprolol" -> "metoprolol tartrate")
+    prefix_matches = [drug for drug in ALL_DRUGS if drug.startswith(name_lower + " ")]
+    if len(prefix_matches) >= 1:
+        return prefix_matches[0]
+
     # Check partial matches (e.g., "Seroquel XR" -> "quetiapine")
     for brand, generic in BRAND_TO_GENERIC.items():
         if brand in name_lower or name_lower in brand:
